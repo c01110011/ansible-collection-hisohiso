@@ -1,0 +1,7 @@
+namespace: c01110011
+name: hisohiso
+version: 0.1.0
+description: Ansible roles for deploying and managing a self-hosted hisohiso encrypted chat server
+authors:
+  - c01110011
+license: MIT
