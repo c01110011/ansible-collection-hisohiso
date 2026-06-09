@@ -5,3 +5,6 @@ server_deploy_dir: /opt/hisohiso
 
 server_repo_url: "https://github.com/draganescu/hisohiso"
 server_repo_branch: "main"
+
+server_domain: hisohiso.org
+mercure_hub_url: "https://hisohiso.org/.well-known/mercure"

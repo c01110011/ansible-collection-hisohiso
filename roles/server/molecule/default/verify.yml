@@ -37,3 +37,27 @@
           - git_dir_stat.stat.exists
           - git_dir_stat.stat.isdir
 
+    - name: Gather stats on .env
+      ansible.builtin.stat:
+        path: "{{ server_deploy_dir }}/.env"
+      register: env_stat
+
+    - name: Ensure env exists
+      ansible.builtin.assert:
+        that:
+          - env_stat.stat.exists
+          - env_stat.stat.isreg
+          - env_stat.stat.mode == "0600"
+
+    - name: Read .env content
+      ansible.builtin.slurp:
+        src: "{{ server_deploy_dir }}/.env"
+      register: env_content
+
+    - name: Ensure .env contains required keys
+      ansible.builtin.assert:
+        that:
+          - "'SERVER_NAME=' in env_content.content | b64decode"
+          - "'MERCURE_PUBLISHER_JWT_KEY=' in env_content.content | b64decode"
+          - "'MERCURE_SUBSCRIBER_JWT_KEY=' in env_content.content | b64decode"
+          - "'MERCURE_HUB_URL=' in env_content.content | b64decode"

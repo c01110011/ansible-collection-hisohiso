@@ -13,3 +13,17 @@
       repo: "{{ server_repo_url }}"
       version: "{{ server_repo_branch }}"
       dest: "{{ server_deploy_dir }}"
+  - name: Verify required secrets are defined
+    ansible.builtin.assert:
+      that:
+        - server_mercure_publisher_key is defined
+        - server_mercure_subscriber_key is defined
+        - server_domain is defined
+      fail_msg: >
+        Required server variables are missing or have placeholder values.
+        Define them in host_vars or group_vars, encrypted with ansible-vault.
+  - name: Write .env file
+    ansible.builtin.template:
+      src: env.j2
+      dest: "{{ server_deploy_dir }}/.env"
+      mode: '0600'
