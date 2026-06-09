@@ -4,3 +4,12 @@
       state: present
       update_cache: true
     loop: "{{ server_required_packages }}"
+  - name: Ensure server deploy directory exists
+    ansible.builtin.file:
+      path: "{{ server_deploy_dir }}"
+      state: directory
+  - name: Clone git repository for hisohiso
+    ansible.builtin.git:
+      repo: "{{ server_repo_url }}"
+      version: "{{ server_repo_branch }}"
+      dest: "{{ server_deploy_dir }}"

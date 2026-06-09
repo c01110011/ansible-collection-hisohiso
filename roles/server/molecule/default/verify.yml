@@ -4,6 +4,10 @@
 - name: Verify dependencies
   hosts: all
   gather_facts: true # Quicker, if you do not need facts
+  vars:
+    server_deploy_dir: /opt/hisohiso
+    server_repo_url: "https://github.com/draganescu/hisohiso"
+    server_repo_branch: "main"
   tasks:
     - name: Gather installed packages
       ansible.builtin.package_facts:
@@ -11,3 +15,25 @@
     - name: Ensure git is installed on the host
       ansible.builtin.assert:
         that: '"git" in ansible_facts.packages'
+    - name: Gather stats on deploy directory
+      ansible.builtin.stat:
+        path: "{{ server_deploy_dir }}"
+      register: deploy_dir_stat
+
+    - name: Ensure deploy directory exists
+      ansible.builtin.assert:
+        that:
+          - deploy_dir_stat.stat.exists
+          - deploy_dir_stat.stat.isdir
+
+    - name: Gather stats on git directory
+      ansible.builtin.stat:
+        path: "{{ server_deploy_dir }}/.git"
+      register: git_dir_stat
+
+    - name: Ensure git exists
+      ansible.builtin.assert:
+        that:
+          - git_dir_stat.stat.exists
+          - git_dir_stat.stat.isdir
+

@@ -1,2 +1,7 @@
 server_required_packages:
   - git
+
+server_deploy_dir: /opt/hisohiso
+
+server_repo_url: "https://github.com/draganescu/hisohiso"
+server_repo_branch: "main"
