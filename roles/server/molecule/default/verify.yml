@@ -61,3 +61,25 @@
           - "'MERCURE_PUBLISHER_JWT_KEY=' in env_content.content | b64decode"
           - "'MERCURE_SUBSCRIBER_JWT_KEY=' in env_content.content | b64decode"
           - "'MERCURE_HUB_URL=' in env_content.content | b64decode"
+
+    - name: Gather stats on compose.yml
+      ansible.builtin.stat:
+        path: "{{ server_deploy_dir }}/compose.yaml"
+      register: compose_yml_stat
+
+    - name: Ensure required compose.yml exist in repository
+      ansible.builtin.assert:
+        that:
+          - compose_yml_stat.stat.exists
+          - compose_yml_stat.stat.isreg
+
+    - name: Gather stats on compose.prod.yml
+      ansible.builtin.stat:
+        path: "{{ server_deploy_dir }}/compose.prod.yaml"
+      register: compose_prod_yml_stat
+
+    - name: Ensure required compose.prod.yml exist in repository
+      ansible.builtin.assert:
+        that:
+          - compose_prod_yml_stat.stat.exists
+          - compose_prod_yml_stat.stat.isreg
